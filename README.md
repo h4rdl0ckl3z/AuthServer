@@ -62,3 +62,24 @@ public class SecurityConfig {
 OIDC Discovery: http://localhost:8080/.well-known/openid-configuration
 
 Public Keys (JWKS): http://localhost:8080/oauth2/jwks
+
+---
+
+## 🧪 การทดสอบด้วย OIDC Debugger
+สามารถทดสอบ Flow การขอรหัส (Authorization Code Flow) ได้ที่ oidcdebugger.com
+
+ตั้งค่าในหน้า OIDC Debugger:
+**1. Authorize URI:** http://localhost:8080/oauth2/authorize
+
+**2. Redirect URI:** https://oidcdebugger.com/debug
+
+**3. Client ID:** oidc-client (ต้องตรงกับที่ Config ใน RegisteredClientRepository)
+
+**4. Scope:** openid profile
+
+**5. Response type:** code
+
+**6. Response mode:** query
+
+
+
