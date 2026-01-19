@@ -142,6 +142,7 @@ Public Keys (JWKS): http://localhost:8080/oauth2/jwks
 สามารถทดสอบ Flow การขอรหัส (Authorization Code Flow) ได้ที่ oidcdebugger.com
 
 ตั้งค่าในหน้า OIDC Debugger:
+
 **1. Authorize URI:** http://localhost:8080/oauth2/authorize
 
 **2. Redirect URI:** https://oidcdebugger.com/debug
