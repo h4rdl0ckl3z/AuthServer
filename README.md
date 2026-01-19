@@ -52,6 +52,79 @@ public class SecurityConfig {
             
         return http.build();
     }
+
+    @Bean
+    public RegisteredClientRepository registeredClientRepository() {
+        RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+            .clientId("oidc-client")
+            .clientName("OIDC Debugger Client")
+            .clientSecret("{noop}secret")
+            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+            .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+            .redirectUri("https://oidcdebugger.com/debug")
+            .scope(OidcScopes.OPENID)
+            .scope(OidcScopes.PROFILE)
+            .clientSettings(ClientSettings.builder()
+                .requireAuthorizationConsent(true)
+                .requireProofKey(true)
+                .build())
+            .tokenSettings(TokenSettings.builder()
+                .accessTokenTimeToLive(Duration.ofMinutes(30))
+                .reuseRefreshTokens(false)
+                .build())
+            .build();
+
+        return new InMemoryRegisteredClientRepository(oidcClient);
+    }
+
+    @Bean
+    public JWKSource<SecurityContext> jwkSource() {
+        KeyPair keyPair = generateRsaKey();
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+        RSAKey rsaKey = new RSAKey.Builder(publicKey)
+            .privateKey(privateKey)
+            .keyID(UUID.randomUUID().toString())
+            .build();
+        JWKSet jwkSet = new JWKSet(rsaKey);
+        return new ImmutableJWKSet<>(jwkSet);
+    }
+
+    private static KeyPair generateRsaKey() { 
+        KeyPair keyPair;
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            keyPair = keyPairGenerator.generateKeyPair();
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
+        }
+        return keyPair;
+    }
+
+    @Bean
+    public AuthorizationServerSettings authorizationServerSettings() {
+        return AuthorizationServerSettings.builder().build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        
+        UserDetails user = User.builder()
+            .username("user")
+            .password("{noop}password")
+            .roles("USER")
+            .build();
+        
+        UserDetails admin = User.builder()
+            .username("admin")
+            .password("{noop}password")
+            .roles("USER", "ADMIN")
+            .build();
+        
+        return new InMemoryUserDetailsManager(user, admin);
+    }
 }
 ```
 ---
@@ -80,6 +153,3 @@ Public Keys (JWKS): http://localhost:8080/oauth2/jwks
 **5. Response type:** code
 
 **6. Response mode:** query
-
-
-
