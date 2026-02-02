@@ -4,7 +4,7 @@
 
 ## 🛠️ Stack Components
 * **Java:** 25
-* **Framework:** Spring Boot 4.0.1
+* **Framework:** Spring Boot 4.0.2
 * **Security:** Spring Security 7.0.2
 * **Build Tool:** Gradle (Groovy)
 * **Database:** Postgres 16+
