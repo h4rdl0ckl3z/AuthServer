@@ -1,4 +1,4 @@
-# แนวทางการพัฒนา Authorization Server ด้วย Spring Boot 4.0.1 & Spring Security 7.0.2
+# แนวทางการพัฒนา Authorization Server ด้วย Spring Boot 4.0.2 & Spring Security 7.0.2
 
 โปรเจกต์ตัวอย่างการสร้าง **OAuth2 Authorization Server** โดยใช้โครงสร้างล่าสุด รองรับ **Java 25** และการตั้งค่าแบบใหม่ (Explicit Configuration) 
 
